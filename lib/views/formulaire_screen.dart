@@ -5,6 +5,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 import '../components/widgets.dart';
 
 class FormulairePage extends StatefulWidget {
@@ -16,6 +17,7 @@ class FormulairePage extends StatefulWidget {
 
 class _FormulairePageState extends State<FormulairePage> {
   final formkey = GlobalKey<FormState>();
+  final GlobalKey<SlideActionState> key = GlobalKey();
   bool isloading = false;
   User user = User();
   TextEditingController name_controller = TextEditingController();
@@ -227,61 +229,60 @@ class _FormulairePageState extends State<FormulairePage> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (formkey.currentState!.validate()) {
-                    dataRetrievefromControllerstoUserModel(user);
-                    if (await checkConnectionAvailability()) {
-                      createFirebaseUser();
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: const Text('Attention !'),
-                                content: Row(
-                                  children: const [
-                                    Flexible(
-                                        flex: 2,
-                                        child: Text(
-                                            'verifier votre connexion internet')),
-                                    SizedBox(
-                                      width: 30,
-                                    ),
-                                    Flexible(
-                                        flex: 1,
-                                        child: Icon(
-                                          Icons
-                                              .signal_wifi_connected_no_internet_4_rounded,
-                                          color: Colors.redAccent,
-                                          size: 60,
+              SlideAction(
+                elevation: 0,
+                text: " Glisser pour proceder",
+                alignment: Alignment.center,
+                textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+                outerColor: Colors.black87,
+                key: key,
+                onSubmit: () {
+                  Future.delayed(const Duration(microseconds: 50), () async {
+                    if (formkey.currentState!.validate()) {
+                      dataRetrievefromControllerstoUserModel(user);
+                      if (await checkConnectionAvailability()) {
+                        createFirebaseUser();
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text('Attention !'),
+                                  content: Row(
+                                    children: const [
+                                      Flexible(
+                                          flex: 2,
+                                          child: Text(
+                                              'verifier votre connexion internet')),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Flexible(
+                                          flex: 1,
+                                          child: Icon(
+                                            Icons
+                                                .signal_wifi_connected_no_internet_4_rounded,
+                                            color: Colors.redAccent,
+                                            size: 60,
+                                          )),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'OK',
+                                          style: TextStyle(color: Colors.blue),
                                         )),
                                   ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text(
-                                        'OK',
-                                        style: TextStyle(color: Colors.blue),
-                                      )),
-                                ],
-                              ));
+                                ));
+                      }
                     }
-                  }
+                    key.currentState?.reset();
+                  });
+                  Alignment.centerRight;
                 },
-                child: isloading == true
-                    ? const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text('valider'),
-                      ),
               ),
             ],
           ),
@@ -322,7 +323,7 @@ class _FormulairePageState extends State<FormulairePage> {
       customDialog(
           title: 'félicitation',
           label: 'vos coordonnées sont ajoutés',
-          icon: Icon(
+          icon: const Icon(
             Icons.gpp_good,
             color: Colors.lightGreen,
             size: 60,
@@ -371,19 +372,6 @@ class _FormulairePageState extends State<FormulairePage> {
   }
 
   checkConnectionAvailability() async {
-    /*bool? checker;
-    var listener = InternetConnectionChecker().onStatusChange.listen((status) {
-      switch (status) {
-        case InternetConnectionStatus.connected:
-          print('Data connection is available.');
-          checker=true;
-          break;
-        case InternetConnectionStatus.disconnected:
-          print('You are disconnected from the internet.');
-          checker=false;
-          break;
-      }
-    });*/
     return await InternetConnectionChecker().hasConnection;
   }
 }

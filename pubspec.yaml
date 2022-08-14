@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore:
   firebase_core:
   internet_connection_checker: ^0.0.1+4
+  slide_to_act: ^2.0.1
 
 dev_dependencies:
   flutter_test:
