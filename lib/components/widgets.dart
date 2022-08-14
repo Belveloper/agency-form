@@ -16,33 +16,32 @@ Widget defaultTextField(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             )));
-Future customDialog({required String? title ,required String label, required Icon icon,required BuildContext context})=>
-showDialog(
-context: context,
-builder: (context) => AlertDialog(
-title:  Text(title!),
-content: Row(
-children:  [
-Flexible(
-flex: 2,
-child: Text(
-label)),
-SizedBox(
-width: 30,
-),
-Flexible(
-flex: 1,
-child:icon),
-],
-),
-actions: [
-TextButton(
-onPressed: () {
-Navigator.of(context).pop();
-},
-child: Text(
-'OK',
-style: TextStyle(color: Colors.blue),
-)),
-],
-));
+Future customDialog(
+        {required String? title,
+        required String label,
+        required Icon icon,
+        required BuildContext context}) =>
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(title!),
+              content: Row(
+                children: [
+                  Flexible(flex: 2, child: Text(label)),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Flexible(flex: 1, child: icon),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Colors.blue),
+                    )),
+              ],
+            ));
