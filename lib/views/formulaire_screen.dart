@@ -2,6 +2,8 @@ import 'package:agency/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
@@ -151,6 +153,7 @@ class _FormulairePageState extends State<FormulairePage> {
                             setState(() {
                               print(DOBcontroller.text);
                             });
+                            return null;
                           });
                         },
                         decoration: InputDecoration(
